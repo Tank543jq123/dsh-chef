@@ -1,0 +1,9 @@
+# dsh-plugin-master 的 bundle patch —— bundle 必须在 patch 里把自己插进去。
+#
+# ⚠ 为什么需要这个文件：
+#   `dsh.profile.bundles` 里的包，宿主只读它的 `dsh.bundle.patch` 指向的 patch 文件，
+#   把里面的 `- insert:` 行并入组装。**没有这个文件，包即使装了也不会生效。**
+#   （实测：只加 bundles + dependencies、不加 patch，dump-config 里一行都没有。）
+- insert:
+    - id: dsh-plugin-master
+      name: dsh-plugin-master

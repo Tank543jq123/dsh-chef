@@ -1,0 +1,21 @@
+# 依赖与构建产物（本插件目前无依赖，但预留）
+node_modules/
+dist/
+*.tgz
+*.log
+
+# 编辑器与系统
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 临时文件
+.tmp/
+*.bak
+*.bak-*
+*.tmp
+
+# 验证脚本运行时可能产生的中间产物
+scripts/.cache/
