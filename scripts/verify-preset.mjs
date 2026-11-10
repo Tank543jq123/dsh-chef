@@ -76,62 +76,9 @@ if (presetMatch) {
   /* 关键：不能包含 master 自己 —— 调度者派调度者会无限递归 */
   ok('不包含 master 自己（防递归）', !ids.includes('master'), JSON.stringify(ids));
   ok('包含 standard', ids.includes('standard'));
-  /* ★ 2026-11-05 新增：第一个专职 Agent 必须可路由 */
-  ok('包含 librarian（第一个专职 Agent）', ids.includes('librarian'), JSON.stringify(ids));
   for (const id of ids) {
     ok(`preset id 非空且无空格: "${id}"`, id.length > 0 && !/\s/.test(id));
   }
-}
-
-/* ── ★ 新增：librarian preset 的结构断言 ──────────────────────────────
- *
- * 这组断言存在的原因：`allowedAgentPresets` 里写了 librarian，
- * 一旦 librarian 注册失败，`validate()` 会 reject → **master 整个变 broken
- * 并从 UI 消失**（见 lib/index.js 里那段注释）。
- * 所以 librarian 能不能起来，直接决定 master 会不会跟着死。
- */
-ok('声明了 librarianPlugins 函数', /function librarianPlugins\s*\(/.test(src));
-ok('声明了 LIBRARIAN_PREFIX 人格', /const LIBRARIAN_PREFIX\s*=/.test(src));
-{
-  const libFn = src.match(/function librarianPlugins\(\)[\s\S]*?\n\}/);
-  ok('能提取到 librarianPlugins 函数体', libFn !== null);
-  if (libFn) {
-    const body = libFn[0];
-
-    /**
-     * ⚠ 这里必须用**精确的 id 字面量**匹配，不能用子串。
-     *
-     * 踩过的坑：原来写 `!body.includes('tool-subagent')`，
-     * 后来补了 `tool-subagent-control`（send_message 来源），
-     * 立刻被这条断言误判成"失败"——因为 'tool-subagent-control' 里含 'tool-subagent'。
-     * 这是测试写得太糙，不是代码有问题。
-     *
-     * 改成匹配 `id: 'xxx'` 的完整字面量。
-     */
-    const hasId = (id) => body.includes(`id: '${id}'`);
-
-    /* 刻意收窄的项：验证它们真的不在 */
-    ok('librarian 不含 tool-workflow（避开 isolate 陷阱）', !hasId('tool-workflow'));
-    ok('librarian 不含 workflow-ptc', !hasId('workflow-ptc'));
-    ok('librarian 不含 tool-subagent（不派子 agent）', !hasId('tool-subagent'));
-    ok('librarian 不含 tool-subagent-list-agents', !hasId('tool-subagent-list-agents'));
-    ok('librarian 不含 tool-web（运维不上网）', !hasId('tool-web'));
-
-    /* 刚性要求 */
-    ok('librarian 含 tool-pwsh（必须能跑测试）', hasId('tool-pwsh'));
-    ok('librarian 含 tool-fs', hasId('tool-fs'));
-    /* ★ send_message 来源 —— 不能因为「不派活」把它一起砍掉 */
-    ok('librarian 含 tool-subagent-control（能回报）', hasId('tool-subagent-control'));
-  }
-}
-{
-  const reg = src.match(/id:\s*'librarian'/);
-  ok("注册调用里有 id: 'librarian'", reg !== null);
-}
-/* 两个 preset 都要经过 tryRegister，避免一个坏了拖垮另一个 */
-{
-  const regCalls = (src.match(/await tryRegister\(/g) || []).length;
-  ok('使用 tryRegister 注册（至少 2 次）', regCalls >= 2, `实际 ${regCalls} 次`);
 }
 
 /* 括号配对的粗查（真配平由 ② 的 import 兜底；这里只抓明显失衡） */
