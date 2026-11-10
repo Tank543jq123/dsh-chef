@@ -54,4 +54,4 @@ node scripts/verify-client.mjs
 
 ## 许可
 
-未声明；仓库已公开（2026-11-10）。如果用于分发或生产，请先明确许可证。
+**0BSD**（BSD Zero Clause）—— 不要求署名、不附加使用条件，只保留免责声明。见 [LICENSE](LICENSE)。
