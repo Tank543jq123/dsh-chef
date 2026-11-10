@@ -29,5 +29,8 @@
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
-  "license": "0BSD"
+  "license": "0BSD",
+  "engines": {
+    "dsh": ">=0.2.2-rc.1 <0.3.0"
+  }
 }

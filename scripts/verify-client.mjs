@@ -122,7 +122,7 @@ try {
 }
 
 ok('__ModuleLoader__.load 被调用', captured !== null);
-ok('模块 id 为 dsh-plugin-master', captured?.id === 'dsh-plugin-master', String(captured?.id));
+ok('模块 id 与包名一致（dsh-chef）', captured?.id === 'dsh-chef', String(captured?.id));
 ok('factory 是函数', typeof captured?.factory === 'function');
 
 const requireShim = (name) => {
