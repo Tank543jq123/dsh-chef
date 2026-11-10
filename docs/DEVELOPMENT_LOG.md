@@ -87,9 +87,9 @@ presets.filter((preset) => preset.broken === void 0)
 
 ### 坑 3：`pnpm install` 会把 `dsh.profile.bundles` 里的条目**删掉**
 
-我把 `dsh-plugin-master` 同时加进 `dependencies` 和 `dsh.profile.bundles`，然后跑 `dsh plugin --profile web install`。
+我把 `dsh-chef` 同时加进 `dependencies` 和 `dsh.profile.bundles`，然后跑 `dsh plugin --profile web install`。
 
-结果：**`bundles` 里的 `dsh-plugin-master` 被 pnpm 删掉了**（`Packages: +1 -26`）。
+结果：**`bundles` 里的 `dsh-chef` 被 pnpm 删掉了**（`Packages: +1 -26`）。
 
 `dump-config` 里一行都没有。反复确认后发现：
 
@@ -124,8 +124,8 @@ bundles 里有 master: False      ← 被删了
 补齐后探针输出：
 
 ```json
-"id": "dsh-plugin-master",
-"url": "plugins/??dsh-plugin-master/client.js&rev=01ac50424add",
+"id": "dsh-chef",
+"url": "plugins/??dsh-chef/client.js&rev=01ac50424add",
 "inject": ["@deepseek-ai/dsh-client-ui-layout", "@deepseek-ai/dsh-client-ui-sidebar"],
 "meta": { "clientPath": "<repo>\\lib\\client.js" }
 ```
@@ -152,7 +152,7 @@ bundles 里有 master: False      ← 被删了
 
 ```js
 window.__ModuleLoader__.load({
-  id: 'dsh-plugin-master',
+  id: 'dsh-chef',
   factory: (require) => { ... return module.exports; },
 });
 ```
@@ -185,12 +185,12 @@ Hard is 项目实测过：写死深色主题值，一旦实例跑浅色主题就
 | 项 | 结果（历史快照） |
 | :--- | :--- |
 | `node --check` 两个文件 | ✅ exit 0 |
-| `dump-config` | ✅ 2094 行，出现 `# == dsh-plugin-master` |
+| `dump-config` | ✅ 2094 行，出现 `# == dsh-chef` |
 | host 半注册 | ✅ `[master] 主厨 preset 注册成功` |
 | roster 里存在 | ✅ `master order=0 broken=(none)` |
 | **`resolve('master')`** | ✅ `{"id":"master"}` —— **无 broken 字段 = 可用** |
 | **`readDocument('master')`** | ✅ len=3825，persona / subagent / workflow-ptc / 主厨 全在 |
-| client 半登记 | ✅ `ClientModuleRegistry.table` 里有 `dsh-plugin-master`，有 bundle URL |
+| client 半登记 | ✅ `ClientModuleRegistry.table` 里有 `dsh-chef`，有 bundle URL |
 | **面板真实渲染** | ✅ 真实 React 服务端渲染出 3709 字节 HTML，9 项文案全在，「服务不可达」误报 false |
 | 其它 8 个插件未受影响 | ✅ 全部仍在 |
 
@@ -201,7 +201,7 @@ node --check <repo>\lib\index.js
 node --check <repo>\lib\client.js
 node <repo>\scripts\verify-client.mjs   # vm 真跑 client.js + renderToStaticMarkup
 node <repo>\scripts\verify-preset.mjs   # 动态 import index.js，查 name/inject/apply
-dsh web --dump-config | findstr "dsh-plugin-master"
+dsh web --dump-config | findstr "dsh-chef"
 ```
 
 ---

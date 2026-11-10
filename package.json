@@ -1,5 +1,5 @@
 {
-  "name": "dsh-plugin-master",
+  "name": "dsh-chef",
   "version": "0.1.0",
   "private": true,
   "description": "主厨 Master Agent：左侧栏常驻入口 + 一个常驻的总调度 preset。不绑任何业务领域。",

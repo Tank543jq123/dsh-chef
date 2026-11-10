@@ -19,8 +19,8 @@
 
 ```bash
 cd ~/.dsh/profiles/<profile>
-pnpm add link:/path/to/dsh-plugin-master
-# 在 profile 的 package.json 里把 "dsh-plugin-master" 加进
+pnpm add link:/path/to/dsh-chef
+# 在 profile 的 package.json 里把 "dsh-chef" 加进
 #   dsh.profile.bundles
 # 然后重启 DSH（不是刷新页面）
 ```
