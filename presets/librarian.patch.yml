@@ -1,6 +1,6 @@
 # 「书阁运维」专职 Agent preset
 #
-# 这个文件被 `C:\dsh-plugin-master\cordis.patch.yml` 通过 `- insert:` 引入吗？
+# 这个文件被 `cordis.patch.yml` 通过 `- insert:` 引入吗？
 # **不是。** DSH 的 profile patch 只能合并同一个文件里的条目，不能跨文件 include。
 # 所以本文件是**权威定义处**，实际生效靠 master 插件把它内联进 `agentPresets.register()`
 # （见 `lib/index.js` 的 `librarianPlugins()`）。
